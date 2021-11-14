@@ -133,6 +133,7 @@
                 };
 
                 const mapNodeCachedVersion = this._getCachedDataItem_Version(KEY_STORAGE_NODES);
+                console.log(`📦 CACHED map data version is ${mapNodeCachedVersion} (${new Date(mapNodeCachedVersion).toString()})`);
                 const shouldUseLiveForMapNodes = shouldUseLiveFor(mapNodeCachedVersion);
                 if (this._shouldBuildMapNodes) {
                     if (shouldUseLiveForMapNodes) {
@@ -188,7 +189,7 @@
         }
 
         get nodeData() {
-            if (this._fbIDToMapNode == {}) {
+            if (this._fbIDToMapNode == {} || this._fbIDToMapNode == undefined) {
                 console.error("Tried to access map nodes before they were loaded; returning null instead");
             }
             return this._fbIDToMapNode;
@@ -287,7 +288,7 @@
             return cached_data[`${keyString}_DATA`];
         }
         _getCachedDataItem_Version(keyString) {
-            return cached_data[`${keyString}_VERSION`];
+            return cached_data[`${keyString}_VERSION`] || 0;
         }
 
         _writeUpdatedCachedMapData(liveDataVersion, isUsingLiveMap) {
