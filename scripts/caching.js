@@ -201,44 +201,6 @@
             return this._connections;
         }
 
-        get namesToFbId() {
-            if (this._namesAndAliasToFbId == {}) {
-                console.error("Tried to access names before they were loaded; returning {} instead");
-            }
-            return this._namesAndAliasToFbId;
-        }
-
-        getFbIDFromGraphVertexIndex(index) {
-            return this._graphIndexToFbID[index];
-        }
-
-        getMapNodeFromGraphVertexIndex(index) {
-            const fbID = this.getFbIDFromGraphVertexIndex(index);
-            return this._fbIDToMapNode[fbID];
-        }
-
-        getMapNodeFromFbID(fbID) {
-            return this._fbIDToMapNode[fbID];
-        }
-
-        getGraphVertexIndexFromFbID(fbID) {
-            return this._fbIDToMapNode[fbID].vertexIndex;
-        }
-
-        getMapNodeDistanceMeters(node1, node2) {
-            return movabletype.haversine(node1.lat, node2.lat, node1.lon, node2.lon);
-        }
-
-        getLocationFbIdFromNameOrAlias(locationNameOrAlias) {
-            // console.log("Validating name", locationNameOrAlias);
-            return this.namesToFbId[locationNameOrAlias];
-        }
-
-        validateLocationFbId(locationFbId) {
-            // console.log("Validating fbid", locationFbId);
-            return Object.values(this.namesToFbId).includes(locationFbId);
-        }
-
         async _getMapLiveVersionNumber() {
             const liveMapVersionRef = this._ref.collection("Constants").doc("Versions");
             return await liveMapVersionRef.get().then((doc) => {
