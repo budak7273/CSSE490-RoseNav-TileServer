@@ -9,12 +9,13 @@
   <div style="padding-left: 3vw;">
     <h1>Hello World!</h1>
     <p>This will Eventually™ become a RoseNav tile server. See the repo here: <a href="https://github.com/budak7273/CSSE490-RoseNav-TileServer">https://github.com/budak7273/CSSE490-RoseNav-TileServer</a> or RoseNav itself here: <a href="https://github.com/budak7273/CSSE280-RoseNav">https://github.com/budak7273/CSSE280-RoseNav</a></p>
+    <p>For now, it updates the cached map data copies stored in firebase to cut down on Firebase traffic.</p>
     <p>It also could eventually be used as a source for the data instead of Firebase, but we don't do that for now because Heroku instances go to sleep due to inactivity, and we don't want to slow down page loads.</p>
-    <p>For now, it updates the cached map data copies to cut down on Firebase traffic.</p>
     <p>Clients also cache data on their end as well, further reducing traffic.</p>
     <p>View cached <a href="/cached-nodes">map nodes</a></p>
     <p>View cached <a href="/cached-nodes">map connections</a></p>
     <p>View cached <a href="/cached-nodes">location names and aliases</a></p>
+    <p><a href="/regen-fb-caches">Trigger a cache update, if newer data present</a></p>
   </div>
 </body>
 </html>

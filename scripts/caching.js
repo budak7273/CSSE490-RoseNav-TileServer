@@ -2,8 +2,6 @@
     const firebase = require("firebase");
     require("firebase/firestore");
 
-    var someThings = "helloworld"; // TODO remove me
-
     const FB_COLLECTION_CONSTANTS = "Constants";
     const FB_COLLECTION_LOCATIONS = "Locations";
     const FB_COLLECTION_CONNECTIONS = "Connections";
@@ -452,23 +450,31 @@
     }
 
     module.exports.getNodeData = async () => {
-        await checkIfNeedToRebuildLocalCopy();
-        console.log("Right before sending node data");
-        return mapDataSubsystemSingleton.nodeData;
+        let rebuilt = await checkIfNeedToRebuildLocalCopy();
+        return {
+            data: mapDataSubsystemSingleton.nodeData,
+            rebuilt: rebuilt
+        };
     }
 
     module.exports.getConnectionData = async () => {
-        await checkIfNeedToRebuildLocalCopy();
-        return mapDataSubsystemSingleton.connectionData;
+        let rebuilt = await checkIfNeedToRebuildLocalCopy();
+        return {
+            data: mapDataSubsystemSingleton.connectionData,
+            rebuilt: rebuilt,
+        };
     }
 
     module.exports.getNameData = async () => {
-        await checkIfNeedToRebuildLocalCopy();
-        return mapDataSubsystemSingleton.nameData;
+        let rebuilt = await checkIfNeedToRebuildLocalCopy();
+        return {
+            data: mapDataSubsystemSingleton.nameData,
+            rebuilt: rebuilt,
+        };
     }
 
     module.exports.forceCheckCacheVersions = async () => {
-        await checkIfNeedToRebuildLocalCopy();
+        return await checkIfNeedToRebuildLocalCopy();
     }
 
 }());
