@@ -67,9 +67,9 @@
             this.vertexIndex = vertexIndex;
     
             const geopoint = fbLocationDocumentData[FB_KEY_LOC_GEO];
-            this.lat = geopoint.df;
-            this.lon = geopoint.wf;
-    
+            this.lat = geopoint.latitude;
+            this.lon = geopoint.longitude;
+
             // if a node has a name, then set its searchability based on the data.
             // otherwise, give it a placeholder name and never let it be searchable
             this.name = fbLocationDocumentData[FB_KEY_LOC_NAME];
@@ -121,7 +121,7 @@
                 // individually, since different parts of the data load at different times.
 
                 const fbCacheNeedsRefreshing = liveDataVersion > fbCachedDataVersion || DEBUG_FORCE_REWRITE_ALL_CACHES;
-                if(fbCacheNeedsRefreshing) {
+                if (fbCacheNeedsRefreshing) {
                     console.log("📝 Firebase cache of map data needs updating, so getting live data and sending up the updated copy");
                 } else {
                     console.log("✅ Firebase cache does not need updating");
@@ -148,10 +148,10 @@
                 const shouldUseLiveForMapNodes = shouldUseLiveFor(mapNodeCachedVersion);
                 if (this._shouldBuildMapNodes) {
                     if (shouldUseFbCachedForMapNodes) {
-                        console.log("💾 Using *Firebase Cached* for MapNodes");
+                        console.log("💾 Using *Firebase cached* for MapNodes");
                         await this._buildNodeDataFromFbCache();
                     } else if (shouldUseLiveForMapNodes) {
-                        console.log("🔥 Using *live firebase* for MapNodes");
+                        console.log("🔥 Using *Firebase live* for MapNodes");
                         await this._buildNodeDataFromFb();
                     } else {
                         console.log("📦 Using *local data* for MapNodes");
@@ -165,10 +165,10 @@
                 const shouldUseLiveForConnections = shouldUseLiveFor(connectionsCachedVersion);
                 if (this._shouldBuildGraph) {
                     if (shouldUseFbCachedForConnections) {
-                        console.log("💾 Using *Firebase Cached* for Connections");
+                        console.log("💾 Using *Firebase cached* for Connections");
                         await this._buildConnectionDataFromFbCache();
                     } else if (shouldUseLiveForConnections) {
-                        console.log("🔥 Using *firebase live* for Connections");
+                        console.log("🔥 Using *Firebase live* for Connections");
                         await this._buildConnectionDataFromFb();
                     } else {
                         console.log("📦 Using *local data* for Connections");
@@ -180,7 +180,7 @@
                 const shouldUseLiveForNames = shouldUseLiveFor(namesCachedVersion);
                 if (this._shouldBuildNames) {
                     if (shouldUseLiveForNames) {
-                        console.log("  Using *MapNodes* for Names");
+                        console.log("   Using *MapNodes* for Names");
                         await this._buildNamesFromMapNodes();
                     } else {
                         console.log("📦 Using *local data* for Names");
@@ -299,7 +299,7 @@
                 let index = 0;
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
-                    // console.log(doc.id, " => ", doc.data());
+                    // console.log("building node", doc.id, " => ", doc.data());
                     const thisNode = new MapNode(doc.id, doc.data(), index);
                     this._fbIDToMapNode[doc.id] = thisNode;
                     index++;
@@ -312,7 +312,7 @@
             this._fbIDToMapNode = this._getCachedDataItem_Data(KEY_STORAGE_NODES);
         }
 
-        //Builds this._fbIDToMapNode from firebase cached copy of data
+        // Builds this._fbIDToMapNode from firebase cached copy of data
         async _buildNodeDataFromFbCache() {
             this._fbIDToMapNode = await this._getJsonFromFirebaseCache("nodes");
         }
@@ -332,7 +332,7 @@
             });
         }
 
-        //Builds this._connections from firebase cached copy of data
+        // Builds this._connections from firebase cached copy of data
         async _buildConnectionDataFromFbCache() {
             this._connections = await this._getJsonFromFirebaseCache("connections");
         }
@@ -438,7 +438,9 @@
     const checkIfNeedToRebuildLocalCopy = async () => {
         if(await mapDataSubsystemSingleton.doesNewerVersionExistThanCached()) {
             console.log("⚠ Live map data is newer so rebuilding");
-            // TODO the new object is not ready in time for the response. Need to fix this if we ever use this as the source for the map data instead of fb.
+            // TODO the new object is not ready in time for the response.
+            // Need to fix this if we ever use this as the source for the map data instead of fb.
+            // For now I have the endpoint reply with status code 202 to try to indicate this
             mapDataSubsystemSingleton = new MapDataSubsystem(true, true, () => {
                 console.log("> Finished rebuilding map data subsystem");
             });
