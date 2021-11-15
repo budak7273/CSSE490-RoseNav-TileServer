@@ -20,21 +20,21 @@ app.get('/cached-nodes', async (req, res) => {
     console.log("Sending cached node data to client");
     const info = await caching.getNodeData();
     res.statusCode = info.rebuilt ? 202 : 203;
-    res.json(info.data);
+    res.json({data: info.data});
 });
 
 app.get('/cached-connections', async (req, res) => {
     console.log("Sending cached connections data to client");
     const info = await caching.getConnectionData();
     res.statusCode = info.rebuilt ? 202 : 203;
-    res.json(info.data);
+    res.json({data: info.data});
 });
 
 app.get('/cached-names', async (req, res) => {
     console.log("Sending cached name data to client");
     const info = await caching.getNameData();
     res.statusCode = info.rebuilt ? 202 : 203;
-    res.json(info.data);
+    res.json({data: info.data});
 });
 
 let lastCheckDate = new Date(0);
@@ -47,10 +47,10 @@ app.get('/regen-fb-caches', async (req, res) => {
         const wasUpdated = await caching.forceCheckCacheVersions();
         lastCheckDate = new Date();
         res.statusCode = wasUpdated ? 202 : 200;
-        res.send(wasUpdated ? "Updated firebase caches" : "No cache update was required")
+        res.json({data: wasUpdated ? "Updated firebase caches" : "No cache update was required"});
     } else {
         res.statusCode = 429;
-        res.send(`It has only been ${difference} ms since last send, needs to be more than ${rateLimitMs}`)
+        res.json({data: `It has only been ${difference} ms since last send, needs to be more than ${rateLimitMs}`});
     }
 });
 
