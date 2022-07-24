@@ -1,6 +1,8 @@
 # CSSE490-RoseNav-TileServer
 
-Right now, a barebones Node.js app using [Express 4](http://expressjs.com/) based on the [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article.
+Was going to be a custom tile server for [RoseNav](https://github.com/budak7273/CSSE280-RoseNav) and might be eventually, but for now, it handles writing the cache copy when needed. This cache handling could probably be done serverless, but that can be implemented later down the line if it's worth our time.
+
+Node.js app using [Express 4](http://expressjs.com/) originally set up with the [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article.
 
 ## Running Locally
 
@@ -22,6 +24,12 @@ npm test
 ```
 
 ## Deploying to Heroku
+
+Make sure you're logged in first:
+
+```sh
+heroku login
+```
 
 ```sh
 git push heroku main
